@@ -1,25 +1,34 @@
 const http = require("http");
+const ErrorHandler = require("./controllers/errorHandler.controller");
 const ProductController = require("./controllers/product.controllers");
 
 const products = require("./data/product.json");
 
-const PORT = 3000 ;
+const PORT = 3000;
 
-const server = http.createServer((req,res)=>{
+const server = http.createServer((req, res) => {
 
-    if(req.url == "/api/products"){
+    console.log(req.method)
 
-        ProductController.get(req,res);
+    if (req.url == "/api/products" && req.method === "GET") {
+
+
+        ProductController.get(req, res);
+    }
+    else if ((req.url === "/api/products") && req.method === "POST") {
+
+        ProductController.create(req,res);
+
+    }
+    else if ((req.url.match(/\/api\/products\/[0-9]+/)) && req.method === "GET") {
+
+        ProductController.getById(req,res)
+
     }
     else {
 
-        res.writeHead(404,{"Content-Type" : "application/json"});
+        ErrorHandler.notFound(res);
 
-        res.write(JSON.stringify({
-            message: "Route is not found"
-        }));
-
-        res.end();
     }
 
 });
