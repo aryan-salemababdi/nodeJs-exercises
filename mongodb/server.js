@@ -30,7 +30,7 @@ async function main(){
         }
     })
 
-    console.log("inserted Document =>",result);
+    console.log("inserted Document =>",result) ;
 
     userCollection.find({}).toArray().then(res=>{
         console.log(res);
